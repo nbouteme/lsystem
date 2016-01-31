@@ -1,47 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lsys.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nbouteme <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/31 23:52:55 by nbouteme          #+#    #+#             */
+/*   Updated: 2016/01/31 23:55:47 by nbouteme         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lsys.h"
 #include <stdlib.h>
+#include <math.h>
 
-void set_constant(t_lsys *self, const char *constants)
+int		expanded_size(t_lsys *self, char *expr)
 {
-	self->consts = ft_strdup(constants);
-}
-
-void set_axiom(t_lsys *self, const char *axiom)
-{
-	self->axiom = ft_strdup(axiom);
-}
-
-int find_rule(t_dlist *elem, char *d)
-{
-	t_lrule *r;
-
-	r = elem->content;
-	return (r->symbol == *d);
-}
-
-void add_rule(t_lsys *self, char symbol, const char *rule)
-{
-	t_lrule *r;
-
-	if (ftext_lstfind(self->rules, (void*)&find_rule, &symbol))
-		return ;
-	r = malloc(sizeof(*r));
-	*r = (t_lrule) { symbol, ft_strdup(rule) };
-	ftext_lstpush_back(self->rules, ftext_lstnewelemown(r, sizeof(*r)));
-}
-
-typedef struct	s_sizecalc
-{
-	int n;
-	char *expr;
-	const char *user;
-}				t_sizecalc;
-
-int expanded_size(t_lsys *self, char *expr)
-{
-	int n;
-	t_dlist *tmp;
-	t_lrule *r;
+	int		n;
+	t_dlist	*tmp;
+	t_lrule	*r;
 
 	n = 0;
 	while (*expr)
@@ -58,11 +35,11 @@ int expanded_size(t_lsys *self, char *expr)
 	return (n);
 }
 
-char *expand_into(t_lsys *self, char *input, char *out)
+char	*expand_into(t_lsys *self, char *input, char *out)
 {
-	int n;
-	t_dlist *tmp;
-	t_lrule *r;
+	int		n;
+	t_dlist	*tmp;
+	t_lrule	*r;
 
 	n = 0;
 	while (*input)
@@ -83,12 +60,12 @@ char *expand_into(t_lsys *self, char *input, char *out)
 	return (out);
 }
 
-char *get_command_string(t_lsys *self, int it)
+char	*get_command_string(t_lsys *self, int it)
 {
-	int i;
-	char *result;
-	char *tmp;
-	int nsize;
+	char	*result;
+	char	*tmp;
+	int		i;
+	int		nsize;
 
 	i = 1;
 	result = ft_strdup(self->axiom);
@@ -100,28 +77,4 @@ char *get_command_string(t_lsys *self, int it)
 		free(tmp);
 	}
 	return (result);
-}
-
-#include <stdio.h>
-
-int main(int argc, char *argv[])
-{
-    t_lsys *l = new_system();
-	set_axiom(l, "FX");
-	l->angle = 45;
-	add_rule(l, 'X', "FFXX");
-	char *r = get_command_string(l, 1);
-	puts(r);
-	free(r);
-
-	r = get_command_string(l, 2);
-	puts(r);
-	free(r);
-
-	r = get_command_string(l, 3);
-	puts(r);
-	free(r);
-
-	del_system(l);
-    return 0;
 }
