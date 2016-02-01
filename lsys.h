@@ -65,5 +65,5 @@ void			set_angle(t_lsys *self, int angle);
 void			add_rule(t_lsys *self, char symbol, const char *rule);
 char			*get_command_string(t_lsys *self, int it);
 void			del_system(t_lsys *lsys);
-
+int			find_rule(t_dlist *elem, char *d);
 #endif
